@@ -17,8 +17,11 @@ Link to my [project code](https://github.com/ShankHarinath/CarND-Traffic-Sign-Cl
 ### Data Set Summary & Exploration
 
 Dataset summary and visualizations are provided below
+
 ![Class Dist](https://raw.githubusercontent.com/ShankHarinath/CarND-Traffic-Sign-Classifier-Project/master/images/Class%20dist.png)
+
 ![Image Dist](https://raw.githubusercontent.com/ShankHarinath/CarND-Traffic-Sign-Classifier-Project/master/images/Image%20dist.png)
+
 ![Image Dist](https://raw.githubusercontent.com/ShankHarinath/CarND-Traffic-Sign-Classifier-Project/master/images/Sample%20class%20images.png)
 
 
