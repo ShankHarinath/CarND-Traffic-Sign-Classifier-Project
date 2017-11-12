@@ -16,7 +16,11 @@ Link to my [project code](https://github.com/ShankHarinath/CarND-Traffic-Sign-Cl
 
 ### Data Set Summary & Exploration
 
-Dataset summary and visualizations are provided in the notebook.
+Dataset summary and visualizations are provided below
+![Class Dist](https://raw.githubusercontent.com/ShankHarinath/CarND-Traffic-Sign-Classifier-Project/master/images/Class%20dist.png)
+![Image Dist](https://raw.githubusercontent.com/ShankHarinath/CarND-Traffic-Sign-Classifier-Project/master/images/Image%20dist.png)
+![Image Dist](https://raw.githubusercontent.com/ShankHarinath/CarND-Traffic-Sign-Classifier-Project/master/images/Sample%20class%20images.png)
+
 
 ### Design and Test a Model Architecture
 
@@ -25,11 +29,9 @@ Dataset summary and visualizations are provided in the notebook.
 
 The only preprocessing is used was normalization.
 All the images are normalized to have zero mean and equal variance. This helps the model to converge soon.
-An example of normalized image is also provided in the notebook.
+An example of normalized image is also provided is below
 
-![alt text][image3]
-
-The difference between the original data set and the augmented data set is the following ... 
+![Preprocessed image](https://raw.githubusercontent.com/ShankHarinath/CarND-Traffic-Sign-Classifier-Project/master/images/Preprocessed%20image.png)
 
 
 #### 2. Model architecture
@@ -137,9 +139,13 @@ Image 2 and 4 ahs a different background, the classifier might find it hard to c
 
 Here are five German traffic signs that I found on the web:
 
-![alt text][image4]
+![Bumpy Road](https://raw.githubusercontent.com/ShankHarinath/CarND-Traffic-Sign-Classifier-Project/master/images/Bumpy%20road.jpg)
+![Children crossing](https://raw.githubusercontent.com/ShankHarinath/CarND-Traffic-Sign-Classifier-Project/master/images/Children%20crossing.jpg)
+![No entry](https://raw.githubusercontent.com/ShankHarinath/CarND-Traffic-Sign-Classifier-Project/master/images/No%20entry.jpg)
+![Road work](https://raw.githubusercontent.com/ShankHarinath/CarND-Traffic-Sign-Classifier-Project/master/images/Road%20work.jpg)
+![Slippery road](https://raw.githubusercontent.com/ShankHarinath/CarND-Traffic-Sign-Classifier-Project/master/images/Slippery%20road.jpg)
 
-The first image might be difficult to classify because ...
+The second and third image might be difficult to classify because of the background.
 
 #### 2. Result
 
