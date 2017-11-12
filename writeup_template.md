@@ -1,8 +1,4 @@
-#**Traffic Sign Recognition** 
-
-##Writeup Template
-
-###You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
+**Traffic Sign Recognition** 
 
 ---
 
@@ -16,156 +12,199 @@ The goals / steps of this project are the following:
 * Analyze the softmax probabilities of the new images
 * Summarize the results with a written report
 
+Link to my [project code](https://github.com/ShankHarinath/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb)
 
-[//]: # (Image References)
+### Data Set Summary & Exploration
 
-[image1]: ./examples/visualization.jpg "Visualization"
-[image2]: ./examples/grayscale.jpg "Grayscaling"
-[image3]: ./examples/random_noise.jpg "Random Noise"
-[image4]: ./examples/placeholder.png "Traffic Sign 1"
-[image5]: ./examples/placeholder.png "Traffic Sign 2"
-[image6]: ./examples/placeholder.png "Traffic Sign 3"
-[image7]: ./examples/placeholder.png "Traffic Sign 4"
-[image8]: ./examples/placeholder.png "Traffic Sign 5"
+Dataset summary and visualizations are provided in the notebook.
 
-## Rubric Points
-###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
+### Design and Test a Model Architecture
 
+#### 1. Preprocessing
 ---
-###Writeup / README
 
-####1. Provide a Writeup / README that includes all the rubric points and how you addressed each one. You can submit your writeup as markdown or pdf. You can use this template as a guide for writing the report. The submission includes the project code.
-
-You're reading it! and here is a link to my [project code](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb)
-
-###Data Set Summary & Exploration
-
-####1. Provide a basic summary of the data set. In the code, the analysis should be done using python, numpy and/or pandas methods rather than hardcoding results manually.
-
-I used the pandas library to calculate summary statistics of the traffic
-signs data set:
-
-* The size of training set is ?
-* The size of the validation set is ?
-* The size of test set is ?
-* The shape of a traffic sign image is ?
-* The number of unique classes/labels in the data set is ?
-
-####2. Include an exploratory visualization of the dataset.
-
-Here is an exploratory visualization of the data set. It is a bar chart showing how the data ...
-
-![alt text][image1]
-
-###Design and Test a Model Architecture
-
-####1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
-
-As a first step, I decided to convert the images to grayscale because ...
-
-Here is an example of a traffic sign image before and after grayscaling.
-
-![alt text][image2]
-
-As a last step, I normalized the image data because ...
-
-I decided to generate additional data because ... 
-
-To add more data to the the data set, I used the following techniques because ... 
-
-Here is an example of an original image and an augmented image:
+The only preprocessing is used was normalization.
+All the images are normalized to have zero mean and equal variance. This helps the model to converge soon.
+An example of normalized image is also provided in the notebook.
 
 ![alt text][image3]
 
 The difference between the original data set and the augmented data set is the following ... 
 
 
-####2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
+#### 2. Model architecture
+---
 
 My final model consisted of the following layers:
 
-| Layer         		|     Description	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| Input         		| 32x32x3 RGB image   							| 
-| Convolution 3x3     	| 1x1 stride, same padding, outputs 32x32x64 	|
-| RELU					|												|
-| Max pooling	      	| 2x2 stride,  outputs 16x16x64 				|
-| Convolution 3x3	    | etc.      									|
-| Fully connected		| etc.        									|
-| Softmax				| etc.        									|
-|						|												|
-|						|												|
+Layer (type)         |        Description |        Output Shape         |     Param #   
+|:---------------------:|:---------------------------------------------:|:---------------------------------------------:|:---------------------------------------------:|
+conv2d_1 (Conv2D)         | Filters: 64, Kernel: (1, 1), Stride: (1,1) |   (None, 32, 32, 64)     |   256 
+conv2d_2 (Conv2D)          | Filters: 128, Kernel: (1, 1), Stride: (1,1) |  (None, 32, 32, 128)    |   8320      
+max_pooling2d_1 (MaxPooling2 | pool_size=(2, 2) | (None, 16, 16, 128)   |    0         
+batch_normalization_1 (Batch | | (None, 16, 16, 128)   |    512       
+dropout_1 (Dropout)        | |  (None, 16, 16, 128)    |   0         
+conv2d_3 (Conv2D)          | Filters: 256, Kernel: (3, 3), Stride: (1,1)|  (None, 14, 14, 256)    |   295168    
+conv2d_4 (Conv2D)           |Filters: 512, Kernel: (3, 3), Stride: (1,1), padding=same | (None, 14, 14, 512)    |   1180160   
+max_pooling2d_2 (MaxPooling2 |pool_size=(2, 2) |(None, 7, 7, 512)      |   0         
+batch_normalization_2 (Batch | |(None, 7, 7, 512)      |   2048      
+dropout_2 (Dropout)       | |   (None, 7, 7, 512)     |    0         
+conv2d_5 (Conv2D)         | Filters: 1024, Kernel: (3, 3), Stride: (1,1)|   (None, 5, 5, 1024)    |    4719616   
+conv2d_6 (Conv2D)         |Filters: 2048, Kernel: (3, 3), Stride: (1,1), padding=same |   (None, 5, 5, 2048)    |    18876416  
+max_pooling2d_3 (MaxPooling2 | pool_size=(2, 2)| (None, 2, 2, 2048)   |     0         
+batch_normalization_3 (Batch | | (None, 2, 2, 2048)   |     8192      
+dropout_3 (Dropout)       | |   (None, 2, 2, 2048)    |    0         
+flatten_1 (Flatten)       | |   (None, 8192)          |    0         
+dense_1 (Dense)           | Units: 2048|   (None, 2048)          |    16779264  
+dropout_4 (Dropout)       | |   (None, 2048)          |    0         
+dense_2 (Dense)            | Units: 1024 |  (None, 1024)           |   2098176   
+dense_3 (Dense)            | Units: 43, Activattion: softmax |  (None, 43)            |    44075     
+_________________________________________________________________
+
+Total params: 44,012,203
+
+Trainable params: 44,006,827
+
+Non-trainable params: 5,376
+
+#### 3. Model parameters
+---
+
+To train the model, I used SGD optimizer with 
+* Learning rate: 0.04
+* Decay: 1e-6
+* Momentum: 0.9
+* Batch size: 60
+
+#### 4. Model and hyperparameter tuning 
+---
+
+Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
+
+My final model results are:
+* training set accuracy of 99.99%
+* validation set accuracy of 93.97% 
+* test set accuracy of 93.33%
+
+##### Models
+###### Note: All the models were run with fixed hyperparameters (Batch: 60, LR: 0.01, Epocs: 20)
+1. My first model was couple of Conv layers followed by a fully connected layer.
+	* Accuracy: 78.535239515281918 %
+2. Second model: Conv + Batch normalization + Fully connected
+	* Accuracy: 84.11718717380261 %
+3. Third model: Conv + Batch normalization + (Fully connected) * 3
+	* Accuracy: 87.18131981666184 %
+4. Fouth model: Conv + Batch normalization + (Fully connected) * 3 + Dropouts
+	* Accuracy: 89.136980859797244 %
+5. Fifth model: Multiple Conv + Dropout + Batch normalization + (Fully connected) * 3 + Dropouts
+	* Accuracy: 92.582346117826691 % (LR: 0.01)
+	* Accuracy: 93.602538505246125 % (LR: 0.03)
+	* Accuracy: 94.410139223175771 % (LR: 0.04)
+6. Sixth model: Multiple Conv + Dropout + Batch normalization + (Fully connected) * 3 + Dropouts + BiLSTM
+	* Accuracy: 91.892324745513476 %
+7. Seventh model: Resnet. I wasn't able to spend time on this model for hyperparameter optimization, but with the inital tests the results were worse than the current model.
+
+##### Hyperparameters
+###### Epocs
+I have set epocs to be 40 and have implemented early stopping to prevent over fitting.
+
+###### Batch size
+Batch size is usually set to 5% of the dataset size for small datasets. Large batch size leads to lot of noise and less updates. Small batch size leads to lot of updates and takes a lot fo time to converge. Hence optimal batch size is around 60-100. I tested with batch size 60, 70 & 80. 60 & 70 leads to almost the same result. I choose 60, as it produced more consistent results.
+
+###### Learning rate
+I used LR of 0.01 to test different model architectures. Once the architecture was finalized, I tested LR = (0.1, 0.01, 0.02, 0.03, 0.04, 0.05, 0.07, 0.08) and the best result for this dataset and model architecture is 0.04.
+
+###### Optimizer
+I have used SGD, I tried ADAM with similar hyperparameters, but the results were very bad and did not converge.
+
+##### Model Design
+Convolution layers are good at learning paterns from images. Conv layers at the lower level learns primitive patterns likt lines and arcs and the conv layers on the higher learns different ways to associate these patterns together. 
+
+Max pooling layer is used to attend to the highest signal from the pool size and propogate only that signal higher up the network.
+
+Batch normalization helps in faster learning and higher accuracies. BN can be used with higher learning rates. We do normalizations as part of preprocessing, with this we normalize after each conv and pooling layer.
+
+Dropout helps generalize the model better and also doesn't tend to rely on any particular signal and activation. Dropout acts like a regularization and prevents overfitting.
+
+Fully connected layer increases the model complexity and parameters, making it more non linear and fits better to the dataset.
  
 
+### Test a Model on New Images
 
-####3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
+#### 1. Downloaded German traffic signs
 
-To train the model, I used an ....
-
-####4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
-
-My final model results were:
-* training set accuracy of ?
-* validation set accuracy of ? 
-* test set accuracy of ?
-
-If an iterative approach was chosen:
-* What was the first architecture that was tried and why was it chosen?
-* What were some problems with the initial architecture?
-* How was the architecture adjusted and why was it adjusted? Typical adjustments could include choosing a different model architecture, adding or taking away layers (pooling, dropout, convolution, etc), using an activation function or changing the activation function. One common justification for adjusting an architecture would be due to overfitting or underfitting. A high accuracy on the training set but low accuracy on the validation set indicates over fitting; a low accuracy on both sets indicates under fitting.
-* Which parameters were tuned? How were they adjusted and why?
-* What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
-
-If a well known architecture was chosen:
-* What architecture was chosen?
-* Why did you believe it would be relevant to the traffic sign application?
-* How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
- 
-
-###Test a Model on New Images
-
-####1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
+Image 2 and 4 ahs a different background, the classifier might find it hard to classify as it might not have learnt to pick up on the actual sign. One way to prevent this is to augment data with sign placed on various backgrounds. This will ensure the model will learn to look for the sign.
 
 Here are five German traffic signs that I found on the web:
 
-![alt text][image4] ![alt text][image5] ![alt text][image6] 
-![alt text][image7] ![alt text][image8]
+![alt text][image4]
 
 The first image might be difficult to classify because ...
 
-####2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
+#### 2. Result
 
 Here are the results of the prediction:
 
 | Image			        |     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| Stop Sign      		| Stop sign   									| 
-| U-turn     			| U-turn 										|
-| Yield					| Yield											|
-| 100 km/h	      		| Bumpy Road					 				|
-| Slippery Road			| Slippery Road      							|
+| Bumpy road      		| Bumpy road   									| 
+| Children crossing     			| Children crossing 										|
+| Slippery road					| Ahead only											|
+| No entry	      		| No entry					 				|
+| Road work			| Road work      							|
 
 
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of ...
+The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of 93.49%. As the samples are less, we see 80%.
 
-####3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
-
-The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
-
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
+#### 3. Description
+For the first image, the model is very sure that this is a bumpy road (probability of 0.86). The top five soft max probabilities were
 
 | Probability         	|     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| .60         			| Stop sign   									| 
-| .20     				| U-turn 										|
-| .05					| Yield											|
-| .04	      			| Bumpy Road					 				|
-| .01				    | Slippery Road      							|
+| 0.86427766  			| Bumpy road   									| 
+| 0.05226449       		| Go straight or left							|
+| 0.01988918			| General caution								|
+| 0.01512395 			| Dangerous curve to the left					|
+| 0.01464832    		| Dangerous curve to the right      			|
 
+For the second image, the model is very sure that this is a Children crossing (probability of 0.82). The top five soft max probabilities were
 
-For the second image ... 
+| Probability         	|     Prediction	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| 0.82879937  | Children crossing | 
+| 0.10710582  |Right-of-way at the next intersection | 
+| 0.04536933  |Pedestrians  | 
+| 0.01386229  |Road narrows on the right | 
+| 0.00155688  			| Beware of ice/snow  							| 
 
-### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
-####1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
+For the third image, the model is very sure that this is a Ahead only (probability of 0.86). This is a wrong prediction as the true label is Slippery road, which has the next highest probability. The image can be confusing as the 32 x 32 image is very pixelated and both these labels have a big thick black blob on the top and thin line at the bottom.
 
+The top five soft max probabilities were
 
+| Probability         	|     Prediction	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| 0.86416894  			| Ahead only   									| 
+| 0.0745926       		| Slippery road							|
+| 0.03324528			| Right-of-way at the next intersection				|
+| 0.00778818 			| Roundabout mandatory					|
+| 0.00422303    		| Children crossing      			|
+
+For the fourth image, the model is very sure that this is a No entry (probability of 0.999). The top five soft max probabilities were
+
+| Probability         	|     Prediction	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| 0.99964654  			| No entry   									| 
+| 0.00024213       		| Turn left ahead							|
+| 0.00008253			| Stop								|
+| 0.0000074 			| Vehicles over 3.5 metric tons prohibited		|
+| 0.00000612    		| Keep left      			|
+
+For the fifth image, the model is somewhat confident that this is a Road work (probability of 0.45). The top five soft max probabilities were
+
+| Probability         	|     Prediction	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| 0.45600978  			| Road work   									| 
+| 0.20368731       		| Dangerous curve to the right					|
+| 0.07430285			| Keep right								|
+| 0.05852807 			| Go straight or right					|
+| 0.04542727    		| Go straight or left      			|
