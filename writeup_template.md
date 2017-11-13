@@ -40,6 +40,8 @@ An example of normalized image is also provided is below
 #### 2. Model architecture
 ---
 
+###### Note: I have used Keras inside Tensorflow 1.4 to build this classifier. TF 1.4 doesn't support Cudnn 5 that comes with the AMI, I had upgrade it to Cudnn6 to make it work.
+
 My final model consisted of the following layers:
 
 Layer (type)         |        Description |        Output Shape         |     Param #   
@@ -88,8 +90,8 @@ Describe the approach taken for finding a solution and getting the validation se
 
 My final model results are:
 * training set accuracy of 99.99%
-* validation set accuracy of 93.97% 
-* test set accuracy of 93.33%
+* validation set accuracy of 94.70% 
+* test set accuracy of 94.21%
 
 ##### Models
 ###### Note: All the models were run with fixed hyperparameters (Batch: 60, LR: 0.01, Epocs: 20)
@@ -158,62 +160,63 @@ Here are the results of the prediction:
 |:---------------------:|:---------------------------------------------:| 
 | Bumpy road      		| Bumpy road   									| 
 | Children crossing     			| Children crossing 										|
-| Slippery road					| Ahead only											|
+| Slippery road					| Slippery road											|
 | No entry	      		| No entry					 				|
-| Road work			| Road work      							|
+| Road work			| Dangerous curve to the right					|
 
 
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of 93.49%. As the samples are less, we see 80%.
+The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of 94.21%. As the samples are less, we see 80%. Multiple runs yeild same result of 80% accuracy.
 
 #### 3. Description
-For the first image, the model is very sure that this is a bumpy road (probability of 0.86). The top five soft max probabilities were
+For the first image, the model is pretty sure that this is a bumpy road (probability of 0.56). The top five soft max probabilities were
 
 | Probability         	|     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| 0.86427766  			| Bumpy road   									| 
-| 0.05226449       		| Go straight or left							|
-| 0.01988918			| General caution								|
-| 0.01512395 			| Dangerous curve to the left					|
-| 0.01464832    		| Dangerous curve to the right      			|
+| 0.56514317  			| Bumpy road   									| 
+| 0.37446201       		| General caution							|
+| 0.03678283			| Traffic signals								|
+| 0.00779012 			| Dangerous curve to the right					|
+| 0.00585902    		| Dangerous curve to the left      			|
 
-For the second image, the model is very sure that this is a Children crossing (probability of 0.82). The top five soft max probabilities were
-
-| Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| 0.82879937  | Children crossing | 
-| 0.10710582  |Right-of-way at the next intersection | 
-| 0.04536933  |Pedestrians  | 
-| 0.01386229  |Road narrows on the right | 
-| 0.00155688  			| Beware of ice/snow  							| 
-
-For the third image, the model is very sure that this is a Ahead only (probability of 0.86). This is a wrong prediction as the true label is Slippery road, which has the next highest probability. The image can be confusing as the 32 x 32 image is very pixelated and both these labels have a big thick black blob on the top and thin line at the bottom.
-
-The top five soft max probabilities were
+For the second image, the model is not very sure that this is a Children crossing (probability of 0.38). The image can be confusing as the 32 x 32 image is very pixelated and both these labels have similar patterns. The top five soft max probabilities were
 
 | Probability         	|     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| 0.86416894  			| Ahead only   									| 
-| 0.0745926       		| Slippery road							|
-| 0.03324528			| Right-of-way at the next intersection				|
-| 0.00778818 			| Roundabout mandatory					|
-| 0.00422303    		| Children crossing      			|
+| 0.38344485  | Children crossing | 
+| 0.29243255  |Pedestrians  | 
+| 0.2490309  |Road narrows on the right  | 
+| 0.04577617  |Right-of-way at the next intersection | 
+| 0.01171124  			| Go straight or right  							| 
 
-For the fourth image, the model is very sure that this is a No entry (probability of 0.999). The top five soft max probabilities were
-
-| Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| 0.99964654  			| No entry   									| 
-| 0.00024213       		| Turn left ahead							|
-| 0.00008253			| Stop								|
-| 0.0000074 			| Vehicles over 3.5 metric tons prohibited		|
-| 0.00000612    		| Keep left      			|
-
-For the fifth image, the model is somewhat confident that this is a Road work (probability of 0.45). The top five soft max probabilities were
+For the third image, the model is very sure that this is a Slippery road (probability of 0.86). The top five soft max probabilities were
 
 | Probability         	|     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| 0.45600978  			| Road work   									| 
-| 0.20368731       		| Dangerous curve to the right					|
-| 0.07430285			| Keep right								|
-| 0.05852807 			| Go straight or right					|
-| 0.04542727    		| Go straight or left      			|
+| 0.86835021  			| Slippery road   									| 
+| 0.08562319       		| Children crossing							|
+| 0.03012757			| Ahead only				|
+| 0.01021088 			| Beware of ice/snow					|
+| 0.0032452    		| Dangerous curve to the right      			|
+
+For the fourth image, the model is very sure that this is a No entry (probability of 0.99). The top five soft max probabilities were
+
+| Probability         	|     Prediction	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| 0.99021006  			| No entry   									| 
+| 0.00955965       		| Turn left ahead							|
+| 0.00011503			| Vehicles over 3.5 metric tons prohibited		|
+| 0.00005785 			| End of no passing		|
+| 0.00001929    		| Stop      			|
+
+For the fifth image, the model is very confident that this is a Dangerous curve to the right (probability of 0.83). But the prediction is wrong. The next predicted label is the correct label and it has missed by a lot. The image can be confusing as the 32 x 32 image is very pixelated and both these labels have similar patterns. The top five soft max probabilities were
+
+| Probability         	|     Prediction	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| 0.83033156  			| Dangerous curve to the right					| 
+| 0.10155332       		| Road work					|
+| 0.03623306			| Go straight or right								|
+| 0.01438843 			| Right-of-way at the next intersection			|
+| 0.00799581    		| Keep right      			|
+
+#### 4. Remarks
+The dataset can be augmented to have different backgrounds overlayed with the traffic signs. This will make the model learn to pick up on traffic signs rather than on the background or lighting etc.
